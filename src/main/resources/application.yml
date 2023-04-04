@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active:
+      #- local
+      - p6spy
+    include:
+      - test
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 2000
+        #one-indexed-parameters: true # paging 1
+
+logging:
+  level:
+    p6spy: info
+    org.hibernate.SQL: debug
+    #org.hibernate.type: trace

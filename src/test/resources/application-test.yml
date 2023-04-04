@@ -1,0 +1,15 @@
+Spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #show_sql: true
+        format_sql: true
+        #dialect: org.hibernate.dialect.oracle10gDialect
+        use_sql_comments: false # JPQL???????
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true #dev??prod????false
