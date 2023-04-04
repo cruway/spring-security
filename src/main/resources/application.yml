@@ -12,6 +12,11 @@ spring:
         max-page-size: 2000
         #one-indexed-parameters: true # paging 1
 
+  security:
+    user:
+      name: user
+      password: 1111
+
 logging:
   level:
     p6spy: info
