@@ -3,29 +3,49 @@ package com.example.springsecurity.common.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfiguration {
 
-    final UserDetailsService userDetailsService;
+    @Bean
+    public UserDetailsManager users() {
+        UserDetails user = User.builder()
+                .username("user")
+                .password("{noop}1111")
+                .roles("USER")
+                .build();
 
-    public SecurityConfig(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+        UserDetails sys = User.builder()
+                .username("sys")
+                .password("{noop}1111")
+                .roles("SYS")
+                .build();
+
+        UserDetails admin = User.builder()
+                .username("user")
+                .password("{noop}1111")
+                .roles("ADMIN", "SYS", "USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, sys, admin);
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         // login権限
-        http.authorizeHttpRequests()
+        http.authorizeRequests()
+                .antMatchers("/user").hasRole("USER")
+                .antMatchers("/admin/pay").access("hasRole('ADMIN') or hasRole('SYS')")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated();
 
-        http.formLogin()
+        http.formLogin();
                 //.loginPage("/loginPage") // ユーザ定義ログインページ
                 /*.defaultSuccessUrl("/") // ログイン成功移動ページ
                 .failureUrl("/login") // ログイン失敗移動ページ
@@ -40,7 +60,7 @@ public class SecurityConfig {
                     System.out.println("exception = " + exception.getMessage());
                     response.sendRedirect("/login");
                 }) // ログイン失敗後、ハンドラー
-                .permitAll()*/;
+                .permitAll();*/
 
         /*http.logout()
                 .logoutUrl("/logout")
@@ -62,15 +82,15 @@ public class SecurityConfig {
                 .rememberMe()
                 .userDetailsService(userDetailsService);*/
 
-        http.sessionManagement(session -> session
+        /*http.sessionManagement(session -> session
                         .sessionFixation().changeSessionId() // セッション固定保護 none, migrateSession, newSession
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // セッション政策
                         .invalidSessionUrl("/invalid")
                         .maximumSessions(1) // セッショn最大許容数, -1: 無制限ログインセッション許容
                         .maxSessionsPreventsLogin(true) // 同時ログイン防止, false: 既存セッション切れ(default)
-                        .expiredUrl("/expired")); // セッションが切れた場合のページ
-
-
+                        .expiredUrl("/expired")); // セッションが切れた場合のページ*/
         return http.build();
     }
+
+
 }
