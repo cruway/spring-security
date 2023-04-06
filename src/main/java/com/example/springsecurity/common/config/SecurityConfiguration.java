@@ -13,30 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public UserDetailsManager users() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password("{noop}1111")
-                .roles("USER")
-                .build();
-
-        UserDetails sys = User.builder()
-                .username("sys")
-                .password("{noop}1111")
-                .roles("SYS")
-                .build();
-
-        UserDetails admin = User.builder()
-                .username("user")
-                .password("{noop}1111")
-                .roles("ADMIN", "SYS", "USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, sys, admin);
-    }
-
-    @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // login権限
         http.authorizeRequests()
                 .antMatchers("/user").hasRole("USER")
@@ -46,7 +23,7 @@ public class SecurityConfiguration {
                 .authenticated();
 
         http.formLogin();
-                //.loginPage("/loginPage") // ユーザ定義ログインページ
+        //.loginPage("/loginPage") // ユーザ定義ログインページ
                 /*.defaultSuccessUrl("/") // ログイン成功移動ページ
                 .failureUrl("/login") // ログイン失敗移動ページ
                 .usernameParameter("userId") // IDパラメータ名設定
@@ -92,5 +69,26 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    @Bean
+    public UserDetailsManager userDetailsService() {
+        UserDetails user = User.builder()
+                .username("user")
+                .password("{noop}1111")
+                .roles("USER")
+                .build();
 
+        UserDetails sys = User.builder()
+                .username("sys")
+                .password("{noop}1111")
+                .roles("SYS")
+                .build();
+
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password("{noop}1111")
+                .roles("ADMIN", "SYS", "USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, sys, admin);
+    }
 }
