@@ -8,9 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
 
 @Configuration
 public class SecurityConfiguration {
@@ -27,22 +24,22 @@ public class SecurityConfiguration {
                 .authenticated();
 
         http
-                .formLogin()
-                .successHandler((request, response, authentication) -> {
+                .formLogin();
+                /*.successHandler((request, response, authentication) -> {
                     RequestCache requestCache = new HttpSessionRequestCache();
                     SavedRequest savedRequest = requestCache.getRequest(request, response);
                     String redirectUrl = savedRequest.getRedirectUrl();
                     response.sendRedirect(redirectUrl);
-                });
+                });*/
 
-        http
+        /*http
                 .exceptionHandling()
-                /*.authenticationEntryPoint((request, response, authException) -> {
+                *//*.authenticationEntryPoint((request, response, authException) -> {
                     response.sendRedirect("/login");
-                })*/
+                })*//*
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
                     response.sendRedirect("/denied");
-                });
+                });*/
         //.loginPage("/loginPage") // ユーザ定義ログインページ
                 /*.defaultSuccessUrl("/") // ログイン成功移動ページ
                 .failureUrl("/login") // ログイン失敗移動ページ
