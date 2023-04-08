@@ -15,6 +15,11 @@ spring:
         #dialect: org.hibernate.dialect.oracle10gDialect
         use_sql_comments: false # JPQL???????
 
+  thymeleaf:
+    cache: false
+  #main:
+  #  allow-bean-definition-overriding: false
+
 decorator:
   datasource:
     p6spy:

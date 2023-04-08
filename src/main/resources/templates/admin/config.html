@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::userHead"></head>
+<body>
+<div th:replace="layout/top::header"></div>
+<div class="container">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            ダッシュボード
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/mypage}">
+                            マイページ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/message}">
+                            メッセージ
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link active" th:href="@{/config}">
+                            設定 <span class="sr-only"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="col-md-10">
+            dd
+        </div>
+    </div>
+</div>
+<div th:replace="layout/footer::footer"></div>
+<script>
+    $('#list').click(function () {
+        $.ajax({
+            url: "http://localhost:8080/api/boards",
+            type: "GET",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (e) {
+                alert(e.responseText);
+                console.log(e);
+            }
+        });
+    });
+</script>
+</body>
+</html>
