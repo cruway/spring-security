@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -45,22 +45,39 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(user, manager, admin);
     }
 
-    // パスワード変換
+    /**
+     * パスワード変換
+     *
+     * 暗証番号を安全に暗号化する
+     *
+     * 暗号化フォーマットは:{id}encodedPassword
+     * ・基本フォーマットはBcrypt:{bcrypt} $ea$1040148241247127148120481248120480.fqvM/BG
+     * ・アルゴリズム種類；bcrypt, noop, pbkdf2, scrypt, sha256
+     *
+     * インタフェース
+     * ・encode(password)；パスワード暗号化
+     * matches(rawPassword, encodedPassword)
+     * ・パスワード比較
+      */
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    // static resource管理
-    public void configure(WebSecurity web) throws  Exception {
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    /** static resource管理
+     *
+     * js/css/imageファイルなど、セキュリティフィルターを適用する必要がないresourceを設定
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "/users").permitAll()
                 .antMatchers("/mypage").hasRole("USER")
                 .antMatchers("/messages").hasRole("MANAGER")
                 .antMatchers("/config").hasRole("ADMIN")

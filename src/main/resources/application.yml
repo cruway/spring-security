@@ -4,7 +4,7 @@ spring:
       #- local
       - p6spy
     include:
-      - test
+      - dev
   data:
     web:
       pageable:
