@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class AccountDto {
 
-    private String userName;
+    private String username;
     private String password;
     private String email;
     private String age;

@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(AccountDto account) {
         userRepository.save(Account.builder()
-                        .userName(account.getUserName())
+                        .username(account.getUsername())
                         .password(passwordEncoder.encode(account.getPassword()))
                         .email(account.getEmail())
                         .age(account.getAge())

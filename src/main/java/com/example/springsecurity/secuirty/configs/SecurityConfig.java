@@ -1,26 +1,45 @@
 package com.example.springsecurity.secuirty.configs;
 
+import com.example.springsecurity.secuirty.provider.CustomAuthenticationProvider;
+import com.example.springsecurity.secuirty.service.CustomUserDetailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final CustomUserDetailService customUserDetailService;
+
     /**
-     * role設定
-     * @return
+     * CustomUserDetailServiceで設定したuserDetailServiceをここで設定する(なんか以前バージョンとは作りが違うらしい)
+     * AccountContext, CustomUserDetailService
      */
     @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
+        return authConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        return new CustomAuthenticationProvider(customUserDetailService, passwordEncoder());
+    }
+
+    /**
+     * role設定(local設定なので上記のコードと同時に使うとstackoverflowが発生する(aopなんとか))
+     * @return
+     */
+    /*@Bean
     public UserDetailsManager userDetailsService() {
         String password = passwordEncoder().encode("1111");
 
@@ -43,7 +62,7 @@ public class SecurityConfig {
                 .build();
 
         return new InMemoryUserDetailsManager(user, manager, admin);
-    }
+    }*/
 
     /**
      * パスワード変換
@@ -77,7 +96,7 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/users").permitAll()
+                .antMatchers("/", "/users", "user/login/**").permitAll() // 権限すべて許可
                 .antMatchers("/mypage").hasRole("USER")
                 .antMatchers("/messages").hasRole("MANAGER")
                 .antMatchers("/config").hasRole("ADMIN")
