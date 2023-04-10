@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!-- xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"を追記 -->
 <div th:fragment="header">
     <nav class="navbar navbar-dark sticky-top bg-dark ">
         <div class="container">
             <a class="text-light" href="#"><h4>Core Spring Security</h4></a>
             <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="/">HOME</a>
+                <li class="nav-item" sec:authorize="isAnonymous()"><!-- isAnonymous() -->
+                    <a class="nav-link text-light" th:href="@{/login}">ログイン</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()"><!-- isAnonymous() -->
+                    <a class="nav-link text-light" th:href="@{/users}">会員登録</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()"><!-- isAuthenticated() -->
+                    <a class="nav-link text-light" th:href="@{/logout}">ログアウト</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" th:href="@{/users}">会員登録</a>
+                    <a class="nav-link text-light" href="/">HOME</a>
                 </li>
             </ul>
         </div>

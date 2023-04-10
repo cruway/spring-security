@@ -102,7 +102,11 @@ public class SecurityConfig {
                 .antMatchers("/config").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin();
+                .formLogin()
+                .loginPage("/login") // ログインページ移動
+                .loginProcessingUrl("/login_proc") // ログインフォーム処理
+                .defaultSuccessUrl("/") // ログイン後のページ
+                .permitAll();
         return http.build();
     }
 }
