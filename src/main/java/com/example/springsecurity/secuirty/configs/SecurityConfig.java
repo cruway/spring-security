@@ -1,11 +1,12 @@
 package com.example.springsecurity.secuirty.configs;
 
-import com.example.springsecurity.secuirty.provider.CustomAuthenticationProvider;
+import com.example.springsecurity.secuirty.provider.FormAuthenticationProvider;
 import com.example.springsecurity.secuirty.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -18,6 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final AuthenticationDetailsSource authenticationDetailsSource;
 
     private final CustomUserDetailService customUserDetailService;
 
@@ -32,7 +35,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        return new CustomAuthenticationProvider(customUserDetailService, passwordEncoder());
+        return new FormAuthenticationProvider(customUserDetailService, passwordEncoder());
     }
 
     /**
@@ -105,6 +108,7 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/login") // ログインページ移動
                 .loginProcessingUrl("/login_proc") // ログインフォーム処理
+                .authenticationDetailsSource(authenticationDetailsSource)
                 .defaultSuccessUrl("/") // ログイン後のページ
                 .permitAll();
         return http.build();
