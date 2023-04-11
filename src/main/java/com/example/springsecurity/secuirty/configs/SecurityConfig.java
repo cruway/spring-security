@@ -15,10 +15,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     private final AuthenticationDetailsSource authenticationDetailsSource;
 
@@ -110,6 +113,7 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login_proc") // ログインフォーム処理
                 .authenticationDetailsSource(authenticationDetailsSource)
                 .defaultSuccessUrl("/") // ログイン後のページ
+                .successHandler(customAuthenticationSuccessHandler)
                 .permitAll();
         return http.build();
     }
