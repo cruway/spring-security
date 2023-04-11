@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
@@ -22,6 +23,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityConfig {
 
     private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    private final AuthenticationFailureHandler customAuthenticationFailureHandler;
 
     private final AuthenticationDetailsSource authenticationDetailsSource;
 
@@ -102,7 +105,7 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/users", "user/login/**").permitAll() // 権限すべて許可
+                .antMatchers("/", "/users", "user/login/**", "/login").permitAll() // 権限すべて許可
                 .antMatchers("/mypage").hasRole("USER")
                 .antMatchers("/messages").hasRole("MANAGER")
                 .antMatchers("/config").hasRole("ADMIN")
@@ -111,9 +114,10 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/login") // ログインページ移動
                 .loginProcessingUrl("/login_proc") // ログインフォーム処理
-                .authenticationDetailsSource(authenticationDetailsSource)
                 .defaultSuccessUrl("/") // ログイン後のページ
-                .successHandler(customAuthenticationSuccessHandler)
+                .authenticationDetailsSource(authenticationDetailsSource) // 詳細認証
+                .successHandler(customAuthenticationSuccessHandler) // 認証成功ハンドラー
+                .failureHandler(customAuthenticationFailureHandler) // 認証失敗ハンドラー
                 .permitAll();
         return http.build();
     }
