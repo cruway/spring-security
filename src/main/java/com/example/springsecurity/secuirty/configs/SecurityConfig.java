@@ -1,5 +1,6 @@
 package com.example.springsecurity.secuirty.configs;
 
+import com.example.springsecurity.secuirty.handler.CustomAccessDeniedHandler;
 import com.example.springsecurity.secuirty.provider.FormAuthenticationProvider;
 import com.example.springsecurity.secuirty.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -119,6 +121,17 @@ public class SecurityConfig {
                 .successHandler(customAuthenticationSuccessHandler) // 認証成功ハンドラー
                 .failureHandler(customAuthenticationFailureHandler) // 認証失敗ハンドラー
                 .permitAll();
+
+        http
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler());
         return http.build();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+        accessDeniedHandler.setErrorPage("/denied");
+        return accessDeniedHandler;
     }
 }
