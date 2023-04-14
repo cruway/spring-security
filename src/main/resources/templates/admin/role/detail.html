@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/common/head::adminHead"></head>
+<body>
+<script type="text/javascript">
+    $(document).ready(function () {
+    });
+</script>
+<div th:replace="admin/common/top::header"></div>
+<div id="maininner">
+    <div class="cc-tab-con">
+        <a href="javascript:tabChange('1');" class="cc-tab-item">使用者管理</a>
+        <a href="javascript:void(0);" class="cc-tab-item on">権限管理</a>
+        <a href="javascript:tabChange('3');" class="cc-tab-item">リソース管理</a>
+    </div>
+    <div class="tbl_wrp">
+        <form class="form-horizontal" th:action="@{/admin/roles}" method="post" th:object="${role}">
+            <div class="form-group">
+                <label for="roleName" class="col-sm-2 control-label">権限名</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-large" name="roleName" id="roleName"
+                           placeholder="roleName" th:value="*{roleName}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="roleDesc" class="col-sm-2 control-label">権限説明</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-large" name="roleDesc" id="roleDesc"
+                           placeholder="roleDesc" th:value="*{roleDesc}">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <button type="Submit" class="btn btn-dark btn-lg">登録</button>
+                    <a class="btn btn-dark btn-lg" style="margin:10px;" href="/admin/roles">目録</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

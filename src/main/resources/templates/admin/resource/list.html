@@ -1,0 +1,45 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/common/head::adminHead"></head>
+<body>
+<script type="text/javascript">
+    $(document).ready(function () {
+    });
+
+</script>
+<div th:replace="admin/common/top::header"></div>
+<div id="maininner">
+    <div class="cc-tab-con">
+        <a href="javascript:tabChange('1');" class="cc-tab-item">使用者管理</a>
+        <a href="javascript:tabChange('2');" class="cc-tab-item">権限管理</a>
+        <a href="javascript:void(0);" class="cc-tab-item on">リソース管理</a>
+    </div>
+    <div class="tbl_wrp">
+        <table class="table">
+            <thead>
+            <tr class="table-info">
+                <th scope="col">リソース名</th>
+                <th scope="col">リソースタイプ</th>
+                <th scope="col">HttpMethod</th>
+                <th scope="col">順番</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="link_btn hover" th:each="resource : ${resources}">
+                <td style="text-align: left;">
+                    <a th:href="@{'/admin/resources/' + ${resource.id}}"><span
+                            th:text="${resource.resourceName}">会員</span></a>
+                </td>
+                <td style="text-align: left;" th:text="${resource.resourceType}"></td>
+                <td style="text-align: left;" th:text="${resource.httpMethod}"></td>
+                <td style="text-align: left;" th:text="${resource.orderNum}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div style="text-align:right;">
+            <p><a class="btn btn-dark btn-lg" style="margin:10px;"
+                  th:href="@{/admin/resources/register}">リソース登録</a></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
