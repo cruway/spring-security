@@ -1,35 +1,46 @@
 package com.example.springsecurity.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.io.Serializable;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@ToString(exclude = {"userRoles"})
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Account extends BaseEntity implements Serializable {
+public class Account extends BaseEntity {
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column
     private String username;
-    private String password;
+
+    @Column
     private String email;
-    private String age;
-    private String role;
+
+    @Column
+    private int age;
+
+    @Column
+    private String password;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+    @JoinTable(name = "account_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "role_id") })
+    private Set<Role> userRoles;
 
     @Builder
-    public Account(String username, String password, String email, String age, String role) {
+    public Account(Long id, String username, String email, int age, String password) {
+        this.id = id;
         this.username = username;
-        this.password = password;
         this.email = email;
         this.age = age;
-        this.role = role;
+        this.password = password;
+        this.userRoles = new HashSet<>();
     }
 }

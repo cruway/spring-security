@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -21,7 +22,7 @@ public class QAccount extends EntityPathBase<Account> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final StringPath age = createString("age");
+    public final NumberPath<Integer> age = createNumber("age", Integer.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
@@ -35,9 +36,9 @@ public class QAccount extends EntityPathBase<Account> {
 
     public final StringPath password = createString("password");
 
-    public final StringPath role = createString("role");
-
     public final StringPath username = createString("username");
+
+    public final SetPath<Role, QRole> userRoles = this.<Role, QRole>createSet("userRoles", Role.class, QRole.class, PathInits.DIRECT2);
 
     public QAccount(String variable) {
         super(Account.class, forVariable(variable));
