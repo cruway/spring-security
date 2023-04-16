@@ -21,11 +21,6 @@ public class UserController {
 
     private final RoleRepository roleRepository;
 
-    @GetMapping("/mypage")
-    public String myPage() {
-        return "user/mypage";
-    }
-
     @GetMapping("/users")
     public String createUser() {
         return "user/login/register";

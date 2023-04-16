@@ -31,28 +31,13 @@
                 </ul>
             </div>
         </nav>
-        <div class="col-md-10">
-            dd
+        <div style="padding-top:50px;"  class="col">
+            <div class="container text-center">
+                <h1 class="text-primary">ここはMYPAGEです。</h1>
+            </div>
         </div>
     </div>
 </div>
 <div th:replace="layout/footer::footer"></div>
-<script>
-    $('#list').click(function () {
-        $.ajax({
-            url: "http://localhost:8080/api/boards",
-            type: "GET",
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (e) {
-                alert(e.responseText);
-                console.log(e);
-            }
-        });
-    });
-</script>
 </body>
 </html>

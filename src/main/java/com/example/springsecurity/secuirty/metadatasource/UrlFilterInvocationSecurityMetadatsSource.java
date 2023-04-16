@@ -17,11 +17,8 @@ public class UrlFilterInvocationSecurityMetadatsSource implements FilterInvocati
     private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = new LinkedHashMap<>();
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-
         HttpServletRequest request = ((FilterInvocation) object).getRequest();
-
         requestMap.put(new AntPathRequestMatcher("/mypage"), Arrays.asList(new SecurityConfig("ROLE_USER")));
-
         if(requestMap != null){
             for(Map.Entry<RequestMatcher, List<ConfigAttribute>> entry : requestMap.entrySet()){
                 RequestMatcher matcher = entry.getKey();
@@ -30,19 +27,16 @@ public class UrlFilterInvocationSecurityMetadatsSource implements FilterInvocati
                 }
             }
         }
-
         return null;
     }
 
     @Override
     public Collection<ConfigAttribute> getAllConfigAttributes() {
         Set<ConfigAttribute> allAttributes = new HashSet<>();
-
         for (Map.Entry<RequestMatcher, List<ConfigAttribute>> entry : requestMap
                 .entrySet()) {
             allAttributes.addAll(entry.getValue());
         }
-
         return allAttributes;
     }
 
