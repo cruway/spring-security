@@ -4,14 +4,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Table(name = "ROLE")
-@EqualsAndHashCode(of = "id")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EqualsAndHashCode(of = "id", callSuper=false)
 public class Role extends BaseEntity {
 
     @Id
@@ -33,10 +32,11 @@ public class Role extends BaseEntity {
     private Set<Account> accounts;
 
     @Builder
-    public Role(String roleName, String roleDesc) {
+    public Role(Long id, String roleName, String roleDesc) {
+        this.id = id;
         this.roleName = roleName;
         this.roleDesc = roleDesc;
-        this.resourcesSet = new LinkedHashSet<>();
+        this.resourcesSet = new HashSet<>();
         this.accounts = new HashSet<>();
     }
 }

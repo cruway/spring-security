@@ -8,9 +8,9 @@ import java.util.Set;
 
 @Entity
 @ToString(exclude = {"userRoles"})
-@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EqualsAndHashCode(of = "id", callSuper=false)
 public class Account extends BaseEntity {
 
     @Id
@@ -27,11 +27,13 @@ public class Account extends BaseEntity {
     private int age;
 
     @Column
+    @Setter
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
     @JoinTable(name = "account_roles", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
+    @Setter
     private Set<Role> userRoles;
 
     @Builder

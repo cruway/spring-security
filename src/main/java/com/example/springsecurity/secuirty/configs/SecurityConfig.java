@@ -2,7 +2,7 @@ package com.example.springsecurity.secuirty.configs;
 
 import com.example.springsecurity.secuirty.handler.CustomAccessDeniedHandler;
 import com.example.springsecurity.secuirty.provider.FormAuthenticationProvider;
-import com.example.springsecurity.secuirty.service.CustomUserDetailService;
+import com.example.springsecurity.secuirty.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +30,7 @@ public class SecurityConfig {
 
     private final AuthenticationDetailsSource authenticationDetailsSource;
 
-    private final CustomUserDetailService customUserDetailService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
 
     /**
      * CustomUserDetailServiceで設定したuserDetailServiceをここで設定する(なんか以前バージョンとは作りが違うらしい)
@@ -43,7 +43,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        return new FormAuthenticationProvider(customUserDetailService, passwordEncoder());
+        return new FormAuthenticationProvider(userDetailsServiceImpl, passwordEncoder());
     }
 
     /**
