@@ -38,7 +38,6 @@ public class RoleController {
     @PostMapping(value="/admin/roles")
     public String createRole(RoleDto roleDto) throws Exception {
         Role role = Role.builder()
-                .id(Long.valueOf(roleDto.getId()))
                 .roleName(roleDto.getRoleName())
                 .roleDesc(roleDto.getRoleDesc())
                 .build();

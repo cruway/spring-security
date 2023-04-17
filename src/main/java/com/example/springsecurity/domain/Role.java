@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode(of = "id", callSuper=false)
+@EqualsAndHashCode(of = "id")
 public class Role extends BaseEntity {
 
     @Id

@@ -10,7 +10,7 @@ import java.util.Set;
 @ToString(exclude = {"userRoles"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode(of = "id", callSuper=false)
+@EqualsAndHashCode(of = "id")
 public class Account extends BaseEntity {
 
     @Id

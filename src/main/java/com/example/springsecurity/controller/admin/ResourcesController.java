@@ -42,7 +42,6 @@ public class ResourcesController {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         Resources resources = Resources.builder()
-                .id(Long.valueOf(resourcesDto.getId()))
                 .resourceName(resourcesDto.getResourceName())
                 .resourceType(resourcesDto.getResourceType())
                 .httpMethod(resourcesDto.getHttpMethod())

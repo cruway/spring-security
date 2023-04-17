@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
                 .username(accountDto.getUsername())
                 .password(passwordEncoder.encode(accountDto.getPassword()))
                 .email(accountDto.getEmail())
-                .age(Integer.parseInt(accountDto.getAge()))
+                .age(accountDto.getAge())
                 .build();
 
         Role role = roleRepository.findByRoleName("ROLE_USER");
@@ -46,10 +46,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void modifyUser(AccountDto accountDto) {
         Account account = Account.builder()
+                .id(Long.valueOf(accountDto.getId()))
                 .username(accountDto.getUsername())
                 .password(accountDto.getPassword())
                 .email(accountDto.getEmail())
-                .age(Integer.parseInt(accountDto.getAge()))
+                .age(accountDto.getAge())
                 .build();
 
         if (accountDto.getRoles() != null) {
@@ -69,10 +70,11 @@ public class UserServiceImpl implements UserService {
     public AccountDto getUser(Long id) {
         Account account = userRepository.findById(id).orElse(Account.builder().build());
         AccountDto accountDto = AccountDto.builder()
+                .id(String.valueOf(account.getId()) )
                 .username(account.getUsername())
                 .password(account.getPassword())
                 .email(account.getEmail())
-                .age(String.valueOf(account.getAge()))
+                .age(account.getAge())
                 .build();
         List<String> roles = account.getUserRoles()
                 .stream()
