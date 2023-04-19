@@ -105,6 +105,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        // 使用者がUSERリソースに接近するためにはROLE_USER権限が必要です
         http
                 .authorizeRequests()
                 .antMatchers("/", "/users", "user/login/**", "/login").permitAll() // 権限すべて許可
